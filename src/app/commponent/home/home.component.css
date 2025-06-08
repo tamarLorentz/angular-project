@@ -1,0 +1,11 @@
+div{
+    background-image: url(http://localhost:5148/aaa.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    height: 100vh;
+    width: 98vw;
+    position: absolute;
+    top: 118px;
+   
+}

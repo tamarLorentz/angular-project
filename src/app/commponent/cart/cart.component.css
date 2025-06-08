@@ -1,0 +1,163 @@
+ /* .border{
+    border-radius: .25rem;
+    border-width: 1px;
+    border-color: color-mix(in srgb, var(--p-surface-200) calc(100%* var(--tw-border-opacity, 1)), transparent);
+    border-style: solid;
+    padding: 15px;
+    }
+    
+    #try{
+    width:50vw;
+    height: 25vh;
+     border-radius: .25rem;
+    border-width: 1px;
+    border-color: color-mix(in srgb, var(--p-surface-200) calc(100%* var(--tw-border-opacity, 1)), transparent);
+    border-style: solid;
+    padding: 15px;
+    }
+    #pic{
+        width: 20px;
+        height: 20px;
+    } */
+     
+     /* צבעי בסיס */
+
+     * סגנון כללי לעיצוב */
+     body {
+         font-family: 'Arial', sans-serif;
+         background: #f2f2f2;
+         color: #333;
+         margin: 0;
+         padding: 0;
+     }
+     
+     /* עיצוב כרטיס עגלת קניות */
+     .card {
+         max-width: 800px; /* הקטנת הרוחב הכללי של עגלת הקניות */
+         margin: 30px auto;
+         margin-top: 60px;
+         padding: 15px;
+         background: #ffffff;
+         border-radius: 8px;
+         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+         overflow: hidden;
+     }
+     
+     /* עיצוב פריטים בתוך הרשימה */
+     .grid {
+         display: flex;
+         flex-direction: column;
+         gap: 10px; /* הקטנת המרווח בין הפריטים */
+     }
+     .pay{
+         position: absolute;
+         top: 7.5rem;
+         left: 1rem;
+     }
+     /* עיצוב פריט בודד */
+     .grid .flex {
+         display: flex;
+         align-items: center;
+         background: #ffffff;
+         border-radius: 6px;
+         transition: transform 0.2s ease, background-color 0.2s ease;
+     }
+     
+     .grid .flex:hover {
+         transform: scale(1.02);
+     }
+     
+     /* עיצוב תמונות */
+     .img {
+         width: 60px; /* הקטנת התמונות */
+         height: 60px; /* הקטנת הגובה */
+         object-fit: cover;
+         border-radius: 4px;
+         margin-right: 10px;
+     }
+     
+     /* עיצוב טקסט */
+     .text-lg {
+         font-size: 0.9rem; /* הקטנת גודל הטקסט */
+         font-weight: 600;
+         color: #555;
+     }
+     
+     .text-secondary {
+         font-size: 0.8rem; /* הקטנת טקסט משני */
+         color: #777;
+     }
+     
+     .text-xl {
+         color: #333;
+         font-size: 1rem; /* הקטנת טקסט ראשי */
+         font-weight: bold;
+     }
+     
+     /* עיצוב מחירים */
+     .price {
+         font-size: 0.95rem; /* הקטנת גודל המחיר */
+         font-weight: 600;
+         color: #444;
+     }
+     .bord{
+         border-radius: 8px;
+         border: 1px solid #949393;
+     }
+     /* עיצוב כפתורים */
+     p-button {
+         margin: 3px; /* הקטנת מרווחים סביב הכפתורים */
+         font-size: 0.75rem; /* הקטנת גודל הטקסט בכפתורים */
+     }
+     .p-6 {
+         padding: 2rem !important;
+     }
+     
+     /* p-button:first-child {
+         background: #ffffff;
+         border: 1px solid #bbb;
+         transition: all 0.3s ease;
+     } */
+     
+     p-button:first-child:hover {
+         color: #fff;
+     }
+     
+     p-button:last-child {
+         border: none;
+         color: white;
+         transition: all 0.3s ease;
+     }
+     
+     /* p-button:last-child:hover {
+         background: #2f2f2f;
+     } */
+     
+     /* כוונון למרווחים ותצוגה */
+     .flex .p-button {
+         padding: 4px 8px; /* הקטנת הפדינג בכפתורים */
+         border-radius: 4px;
+     }
+     
+     /* התאמת רשימה */
+     .grid .flex .flex-auto {
+         font-size: 0.85rem; /* טקסט כללי מוקטן */
+     }
+     img{
+        width: 200px;
+     }
+     #image{
+padding-right: 200px;
+
+     }
+     #totalAmount{
+
+        position: absolute;
+        top: 16vh;
+        left: 45vw;
+width: 12vw;
+height: 2vw;
+     }
+     #p-total{
+        height: -5vh;
+     }

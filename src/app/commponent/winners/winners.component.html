@@ -1,0 +1,24 @@
+
+<!-- *ngIf="visible" -->
+<div class="card"  >
+    <p-table [value]="gifts" stripedRows [tableStyle]="{'min-width': '50rem'}">
+        <ng-template #header>
+            <tr>
+                <th>Name</th>
+                <th>email</th>
+                <th>phone</th>
+                <th>giftName</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-gift>
+            @if(gift.winner){
+            <tr>
+                <td>{{gift.name}}:</td>
+                <td>{{gift.winner.name}}</td>
+                <td>{{gift.winner.email}}</td>
+                <td>{{gift.winner.phone}}</td>
+            </tr>
+        }
+        </ng-template>
+    </p-table>
+</div>

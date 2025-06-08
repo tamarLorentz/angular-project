@@ -1,0 +1,27 @@
+.border{
+    border-radius: .25rem;
+    border-width: 1px;
+    border-color: color-mix(in srgb, var(--p-surface-200) calc(100%* var(--tw-border-opacity, 1)), transparent);
+    border-style: solid;
+    padding: 10px;
+    }
+    
+    #try{
+        width:50vw;
+        height: 25vh;
+        border-radius: .25rem;
+    border-width: 1px;
+    border-color: color-mix(in srgb, var(--p-surface-200) calc(100%* var(--tw-border-opacity, 1)), transparent);
+    border-style: solid;
+    padding: 15px;
+    }
+    #pic{
+        width: 20px;
+        height: 20px;
+    }
+    p-button{
+        background-color: black;
+    }
+    .p-6 {
+        padding: 3rem 1rem  !important;
+    }

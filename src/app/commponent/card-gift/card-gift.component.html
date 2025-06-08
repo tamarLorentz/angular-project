@@ -1,0 +1,68 @@
+<link href="https://unpkg.com/primeflex/primeflex.css" rel="stylesheet" />
+<p-toast />
+<div class="card">
+    <p-dataview #dv [value]="products()" [layout]="layout">
+        <ng-template #grid let-items>
+            <div class="grid grid-cols-12 gap-4">
+                <div *ngFor="let product of items" class="col-span-12 sm:col-span-6 md:col-span-4 xl:col-span-6 p-2">
+                    <div
+                        class="p-6 border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-900 rounded flex flex-col"
+                    >
+                        <div class="bg-surface-50 flex justify-center rounded p-4">
+                            <div class="relative mx-auto">
+                                <img
+                                    class="rounded w-full"
+                                    [src]="'http://localhost:5148/' + product.image"
+                                    [alt]="product.name"
+                                    style="max-width: 300px"
+                                />
+                               
+                            </div>
+                        </div>
+                        <div class="pt-6">
+                            <div class="flex flex-row justify-between products-start gap-2">
+                                <div>
+                                    <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">{{
+                                        product.category
+                                    }}</span>
+                                    <div class="text-lg font-medium mt-1">{{ product.name }}</div>
+                                </div>
+                                <div class="bg-surface-100 p-1" style="border-radius: 30px; height:100%">
+                                 
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-6 mt-6">
+                                <span class="text-2xl font-semibold">{{ product.price | currency: 'USD' }}</span>
+                                <div class="flex gap-2">
+                                    <div class="card flex justify-center">
+                                      
+                                    </div>
+                                    <button
+                                        pButton
+                                        severity="contrast"
+                                        icon="pi pi-shopping-cart"
+                                        label="add Tickets"
+                                        class="flex-auto whitespace-nowrap"
+                                        [disabled] ="product.winner"
+                                        (click)="addTickets(product, amount.value)"
+                                    ></button>
+                                    <p-inputnumber  [disabled] = "product.winner" #amount [ngModel]="1" min="1" [showButtons]="true" buttonLayout="vertical" spinnerMode="vertical" inputId="vertical"  [inputStyle]="{ width: '3rem' }">
+                                        <ng-template #incrementbuttonicon>
+                                            <span class="pi pi-plus"></span>
+                                        </ng-template>
+                                        <ng-template #decrementbuttonicon>
+                                            <span class="pi pi-minus"></span>
+                                        </ng-template>
+                                    <span>1</span></p-inputnumber>
+                                    <!-- <button pButton icon="pi pi-heart" outlined></button> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </p-dataview>
+</div>
+
+Loading

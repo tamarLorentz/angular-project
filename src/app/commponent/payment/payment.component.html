@@ -1,0 +1,139 @@
+<link href="https://unpkg.com/primeflex/primeflex.css" rel="stylesheet" />
+
+<div class="card flex justify-center">
+  <p-dialog
+    header="Edit Profile"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '25rem' }"
+    (onHide)="closeDialogPatment()"
+  >
+    <span class="p-text-secondary block mb-6">Update your information.</span>
+
+    <form #form="ngForm" (ngSubmit)="saveOrder()">
+      <!-- שדות שם משתמש -->
+      <div class="flex items-center gap-4 mb-2">
+        <label for="username" class="font-semibold w-24">Username</label>
+        <input
+          [(ngModel)]="user.name"
+          pInputText
+          id="username"
+          name="username"
+          class="flex-auto"
+          autocomplete="off"
+          required
+          #username="ngModel"
+        />
+      </div>
+      <div class="mb-2">
+        <small class="text-red-500" *ngIf="username.invalid && username.touched">Name is required.</small>
+      </div>
+
+      <!-- שדות דוא"ל -->
+      <div class="flex items-center gap-4 mb-2">
+        <label for="email" class="font-semibold w-24">Email</label>
+        <input
+          [(ngModel)]="user.email"
+          pInputText
+          id="email"
+          name="email"
+          class="flex-auto"
+          autocomplete="off"
+          required
+          email
+          #email="ngModel"
+        />
+      </div>
+      <div class="mb-2">
+        <small class="text-red-500" *ngIf="email.invalid && email.touched">Please enter a valid email address.</small>
+      </div>
+
+      <!-- שדות טלפון -->
+      <div class="flex items-center gap-4 mb-6">
+        <label for="phone" class="font-semibold w-24">Phone</label>
+        <input
+          [(ngModel)]="user.phone"
+          pInputText
+          id="phone"
+          name="phone"
+          class="flex-auto"
+          autocomplete="off"
+          pattern="^[0-9]{10}$"
+          #phone="ngModel"
+        />
+      </div>
+      <div class="mb-2">
+        <small class="text-red-500" *ngIf="phone.invalid && phone.touched">Phone number must be 10 digits.</small>
+      </div>
+
+      <!-- שדות כרטיס אשראי -->
+      <div class="flex items-center gap-4 mb-2">
+        <label for="cardNumber" class="font-semibold w-24">Card Number</label>
+        <input
+          [(ngModel)]="creditCard.cardNumber"
+          pInputText
+          id="cardNumber"
+          name="cardNumber"
+          class="flex-auto"
+          maxlength="16"
+          autocomplete="off"
+          required
+          pattern="^[0-9]{16}$"
+          #cardNumber="ngModel"
+        />
+      </div>
+      <div class="mb-2">
+        <small class="text-red-500" *ngIf="cardNumber.invalid && cardNumber.touched">Card number must be 16 digits.</small>
+      </div>
+
+      <div class="flex items-center gap-4 mb-2">
+        <label for="expiryDate" class="font-semibold w-24">Expiry Date</label>
+        <input
+          [(ngModel)]="creditCard.expiryDate"
+          pInputText
+          id="expiryDate"
+          name="expiryDate"
+          class="flex-auto"
+          placeholder="MM/YY"
+          autocomplete="off"
+          required
+          pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$"
+          #expiryDate="ngModel"
+        />
+      </div>
+      <div class="mb-2">
+        <small class="text-red-500" *ngIf="expiryDate.invalid && expiryDate.touched">Enter expiry date in MM/YY format.</small>
+      </div>
+
+      <div class="flex items-center gap-4 mb-2">
+        <label for="cvv" class="font-semibold w-24">CVV</label>
+        <input
+          [(ngModel)]="creditCard.cvv"
+          pInputText
+          id="cvv"
+          name="cvv"
+          class="flex-auto"
+          maxlength="3"
+          type="password"
+          autocomplete="off"
+          required
+          pattern="^[0-9]{3}$"
+          #cvv="ngModel"
+        />
+      </div>
+      <div class="mb-2">
+        <small class="text-red-500" *ngIf="cvv.invalid && cvv.touched">CVV must be 3 digits.</small>
+      </div>
+
+      <!-- כפתורי פעולה -->
+      <div class="flex justify-end gap-2">
+        <p-button label="Cancel" severity="secondary" (click)="closeDialogPatment()"></p-button>
+        <p-button
+          label="Save"
+          type="submit"
+          [disabled]="form.invalid"
+        ></p-button>
+      </div>
+    </form>
+  </p-dialog>
+</div>

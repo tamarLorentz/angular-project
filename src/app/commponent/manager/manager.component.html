@@ -1,0 +1,32 @@
+<p-toast />
+<div class="card">
+<!-- <link href="https://unpkg.com/primeflex/primeflex.css" rel="stylesheet" /> -->
+  
+    <div class="flex flex-wrap justify-center gap-2 mb-2">
+        @if(isManager()){
+        <p-button (click)="logOut()" icon="pi pi-user" label="Log Out" severity="contrast" styleClass="min-w-40" />
+        } 
+         @else{ 
+        <p-button (click)="showDialog('topright')" icon="pi pi-user" label="Manager" severity="contrast" styleClass="min-w-40" />
+        }
+    </div>
+    <br/>
+    <p-dialog header="Manager" [modal]="true" [(visible)]="visible" [position]="position" [style]="{ width: '25rem' }">
+        <span class="text-surface-500 dark:text-surface-400 block mb-4">Entere your details.</span>
+        <br/>
+        <div class="flex items-center gap-4 mb-4">
+            <label for="username" class="font-semibold w-24">Username</label>
+            <input pInputText id="username" class="flex-auto" autocomplete="off" />
+        </div>
+        <br/>
+        <div class="flex items-center gap-4 mb-4">
+            <label for="password"  class="font-semibold w-24">password</label>
+            <input pInputText id="password" type ="password" [(ngModel)] = "password" class="flex-auto" autocomplete="off" />
+        </div>
+        <br/>
+        <div class="flex justify-end gap-2">
+            <p-button label="Cancel" severity="secondary" (click)="visible = false" />
+            <p-button label="Save" severity="contrast"(click)="saveManager()" />
+        </div>
+    </p-dialog>
+</div>

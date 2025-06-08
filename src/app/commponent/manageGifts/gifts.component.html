@@ -1,0 +1,187 @@
+<div class="card">
+    <p-toast />
+    <p-toolbar styleClass="mb-6">
+    <ng-template #start>
+        <p-button label="New" icon="pi pi-plus" severity="contrast" id="newButton" class="mr-2" (onClick)="openNew()" />
+        <p-button severity="danger" label="Delete" icon="pi pi-trash"  outlined (onClick)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length" />
+    </ng-template>
+<ng-template #end>
+    <div class="card">
+        <p-toast severity="contrast"/>
+        <p-confirmdialog key="positionDialog" [position]="position" />
+        <div class="flex flex-wrap justify-center gap-2 mb-4">
+            <!-- <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV($event)" /> -->
+            <p-button (click)="confirmPosition('top')" icon="pi pi pi-bullseye" label="raffle" severity="contrast" styleClass="min-w-40" [disabled] = "" />
+        </div>
+    </div>
+</ng-template> 
+ 
+        <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" auto customUpload class="mr-2 inline-block" [chooseButtonProps]="{ severity: 'secondary' }" />
+        <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" /> -->
+   
+</p-toolbar>
+
+<p-table
+    #dt
+    [value]="products"
+    [rows]="10"
+    [columns]="cols"
+    [paginator]="true"
+    [globalFilterFields]="['name', 'country.name', 'representative.name', ]"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [(selection)]="selectedProducts"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+>
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Manage Products</h5>
+            <p-iconfield>
+                <p-inputicon styleClass="pi pi-search" />
+                <input pInputText type="text" [(ngModel)]="searchValue" (input)="dt.filterGlobal(searchValue, 'contains')" placeholder="Search..." />
+            </p-iconfield>
+        </div>
+    </ng-template>
+    <ng-template #header>
+        <tr>
+            <th style="width: 3rem">
+                <p-tableHeaderCheckbox />
+            </th>
+            <th style="min-width: 16rem">Code</th>
+            <th pSortableColumn="name" style="min-width:16rem">
+                Name
+                <p-sortIcon field="name" />
+            </th>
+            <th>Image</th>
+            <th pSortableColumn="price" style="min-width: 8rem">
+                Price
+                <p-sortIcon field="price" />
+            </th>
+            <th pSortableColumn="category" style="min-width:10rem">
+                Category
+                <p-sortIcon field="category" />
+            </th>
+            <!-- <th pSortableColumn="rating" style="min-width: 12rem">
+                Reviews
+                <p-sortIcon field="rating" /> 
+            </th> -->
+            <th pSortableColumn="donor" style="min-width: 12rem">
+                Donor
+                <p-sortIcon field="donor" />
+            </th>
+            <th style="min-width: 12rem"></th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-product>
+        <tr>
+            <td style="width: 3rem">
+                <p-tableCheckbox  [disabled]="product.users.length>0 " [value]="product"/>
+            </td>
+            <td style="min-width: 12rem">{{ product.id }}</td>
+            <td style="min-width: 16rem">{{ product.name }}</td>
+            <td>
+                <img [src]="'http://localhost:5148/' + product.image" [alt]="product.name" style="width: 64px" class="rounded" />
+            </td>
+            <td>{{ product.price | currency: 'USD' }}</td>
+            <td>{{ product.category }}</td>
+            <!-- <td>
+                <p-rating [(ngModel)]="product.rating" [readonly]="true" [disabled]="false" />
+            </td> -->
+            <td>
+                <p-tag [value]="getDonorName(product.donor)"  />
+            </td>
+            <td>
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editProduct(product)" />
+                <p-button icon="pi pi-trash" [disabled]="product.users.length>0" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteProduct(product)" />
+
+                <p-button icon="pi pi-bullseye" severity="secondary"  [disabled] = " product.winner" [rounded]="true" [outlined]="true" (click)="raffle(product)" />
+
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template #summary>
+        <div class="flex items-center justify-between">In total there are {{ products ? products.length : 0 }} products.</div>
+    </ng-template>
+</p-table>
+
+<p-dialog [(visible)]="productDialog" [style]="{ width: '450px' }" header="Product Details" [modal]="true">
+    <ng-template #content>
+        <div class="flex flex-col gap-6">
+            <img [src]="'http://localhost:5148/' + product.image" [alt]="product.image" class="block m-auto pb-4" *ngIf="this.imagView" />
+            <div>                <label for="name" class="block font-bold mb-3">Name</label>
+                <input type="text" pInputText id="name" name="name" [(ngModel)]="product.name" required appDuplicateProduct autofocus fluid #name="ngModel" />
+                <div>
+                    <label for="donor" class="block font-bold mb-3">Donor</label>
+                   
+                    <p-select [(ngModel)]="donorName" inputId="donor" id="donors" [options]="donors" optionLabel="name" placeholder="Select a Donor" fluid />
+                </div>
+                <!-- שגיאה אם השם לא הוזן -->
+                <small class="text-red-500" *ngIf="submitted && !product.name">Name is required.</small>
+              
+                <!-- שגיאה אם השם כבר קיים -->
+                <small class="text-red-500" *ngIf="name?.errors?.['duplicateProduct']">this Name is already  exist.</small>
+              </div>
+              
+            <!-- <div>
+                <label for="image" class="block font-bold mb-3">image</label>
+                <textarea id="image" pTextarea [(ngModel)]="product.image" required rows="3" cols="20" fluid (blur)="onBlur()" (focus)="onFocus()"></textarea>
+            </div> -->
+<!-- תוסף רכיב העלאת קובץ בדיאלוג פרטי המוצר -->
+<div>
+    <label for="image" severity="contrast" class="block font-bold mb-3">Image</label>
+    <p-fileUpload
+    [chooseButtonProps]="{severity:'contrast'}"
+        name="file"
+        [url]="uploadUrl"
+        accept="image/*"
+       [maxFileSize] ="1000000"
+        chooseLabel="Choose Image"
+        (onUpload)="onImageUpload($event,product)"
+        
+        [auto]="true" />
+</div>
+
+           
+
+            <div>
+                <span class="block font-bold mb-4">Category</span>
+                <div class="grid grid-cols-12 gap-4">
+                    <div class="flex items-center gap-2 col-span-6">
+                        <p-radiobutton id="category1" name="category" value="Man" [(ngModel)]="product.category" />
+                        <label for="category1">Man</label>
+                    </div>
+                    <div class="flex items-center gap-2 col-span-6">
+                        <p-radiobutton id="category2" name="category" value="Woman" [(ngModel)]="product.category" />
+                        <label for="category2">Woman</label>
+                    </div>
+                    <div class="flex items-center gap-2 col-span-6">
+                        <p-radiobutton id="category3" name="category" value="Children" [(ngModel)]="product.category" />
+                        <label for="category3">Children</label>
+                    </div>
+                    <div class="flex items-center gap-2 col-span-6">
+                        <p-radiobutton id="category4" name="category" value="General" [(ngModel)]="product.category" />
+                        <label for="category4">General</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-6">
+                    <label for="price" class="block font-bold mb-3">Price</label>
+                    <p-inputnumber id="price" [(ngModel)]="product.price" mode="currency" currency="USD" locale="en-US" fluid />
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button label="Cancel" severity="secondary" icon="pi pi-times" text (click)="hideDialog()" />
+        <p-button label="Save"  severity="contrast" icon="pi pi-check" (click)="saveProduct()" />
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }" />
+
+</div>

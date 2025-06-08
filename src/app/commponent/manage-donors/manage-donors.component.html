@@ -1,0 +1,111 @@
+<div class="card">
+    <p-toast />
+    <p-table [value]="donors" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)">
+       
+        <ng-template #caption>
+            <div class="flex flex-wrap justify-end gap-2">
+                <p-button label="New" icon="pi pi-plus" id="newButton" class="mr-2" severity="contrast" (onClick)="openNew()" />
+                <p-button label="Expand All" icon="pi pi-plus" text (onClick)="expandAll()"severity="secondary" />
+                <p-button label="Collapse All" icon="pi pi-minus" text (onClick)="collapseAll()" severity="secondary"/>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="width: 5rem"></th>
+                <th>Code</th>
+                <th pSortableColumn="name">Name <p-sortIcon field="name" /></th>
+                <th pSortableColumn="email">Email <p-sortIcon field="email" /></th>
+                <th pSortableColumn="phone">Phone <p-sortIcon field="phone" /></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-donor let-expanded="expanded">
+            <tr>
+                <td>
+                    <p-button type="button" pRipple [pRowToggler]="donor" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+                </td>
+                <td>{{ donor.id }}</td>
+                <td>{{ donor.name }}</td>
+                <td>{{ donor.email }}</td>
+                <td>{{ donor.phone }}</td>
+                <!-- <td><p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false" /></td> -->
+                <!-- <td>
+                    <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)" />
+                </td> -->
+                <td>
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true"(click)="editDonor(donor)" />
+                <p-button icon="pi pi-trash" [disabled]="filter(donor).length>0" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteDonor(donor)" />
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #expandedrow let-donor>
+            <tr>
+                <td colspan="7">
+                    <div class="p-4">
+                        <h5>gifts for {{ donor.name}}</h5>
+                        <p-table [value]="filter(donor)" dataKey="id">
+                            <ng-template #header>
+                                <tr>
+                                    <th pSortableColumn="id">Id <p-sortIcon field="id" /></th>
+                                    <th pSortableColumn="name">Name <p-sortIcon field="name" /></th>
+                                    <th pSortableColumn="price">Price <p-sortIcon field="price" /></th>
+                                    <th pSortableColumn="category">Category <p-sortIcon field="category" /></th>
+                                    <!-- <th pSortableColumn="status">Status <p-sortIcon field="status" /></th> -->
+                                    <!-- <th style="width: 4rem"></th> -->
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-gift>
+                                <tr>
+                                    <td>{{ gift.id }}</td>
+                                    <td>{{ gift.name }}</td>
+                                    <td>{{ gift.price }}</td>
+                                    <td>{{ gift.category }}</td>
+                                    <!-- <td>
+                                        <p-tag [value]="order.status" [severity]="getStatusSeverity(order.status)" />
+                                    </td> -->
+                                </tr>
+                            </ng-template>
+                            <ng-template #emptymessage>
+                                <tr>
+                                    <td colspan="6">There are no gifts for this donor yet.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <p-dialog [(visible)]="donorDialog" [style]="{ width: '450px' }" header="Donor Details" [modal]="true">
+        <ng-template #content>
+            <div class="flex flex-col gap-6">
+                <div> <label for="name" class="block font-bold mb-3">Name</label>
+                    <input type="text" pInputText id="name" name="name" [(ngModel)]="donor.name" required autofocus appDuplicateDonor fluid #name="ngModel"  />
+                    <small class="text-red-500" *ngIf="submitted && !donor.name">Name is required.</small>
+                    <small class="text-red-500" *ngIf="name?.errors?.['duplicateDonor']">this Name is already exist.</small>
+                </div>
+    
+                <div class="grid grid-cols-12 gap-4">
+                    <div class="col-span-6">
+                        <label for="phone" class="block font-bold mb-3">Phone</label>
+                        <input type="text" pInputText id="phone" [(ngModel)]="donor.phone" fluid  />
+                    </div>
+                    <div class="col-span-6">
+                        <label for="email" class="block font-bold mb-3">Email</label>
+                        <input type="email" pInputText id="email" [(ngModel)]="donor.email"  fluid email required #email="ngModel" />
+                        <small class="text-red-500" *ngIf="submitted && !donor.name">email is required.</small>
+                        <small *ngIf="email.errors?.['email']">Please enter a valid email address.</small>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    
+        <ng-template #footer>
+            <p-button label="Cancel" icon="pi pi-times" severity="contrast" text (click)="hideDialog()" />
+            <p-button label="Save" icon="pi pi-check" severity="contrast" (click)="saveDonor()" />
+            
+        </ng-template>
+    </p-dialog>
+    
+    <p-confirmDialog [style]="{ width: '450px' }" />
+</div>
+

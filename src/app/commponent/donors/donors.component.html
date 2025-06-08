@@ -1,0 +1,98 @@
+<div class="card">
+    <p-toast />
+    <p-toolbar styleClass="mb-6">
+        <ng-template #start>
+            <p-button label="New" icon="pi pi-plus" id="newButton" class="mr-2" (onClick)="openNew()" />
+        </ng-template>
+    </p-toolbar>
+
+    <p-table #dt [value]="donors" [rows]="10" [columns]="cols" [paginator]="true"
+        [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+        [tableStyle]="{ 'min-width': '75rem' }" [(selection)]="selectedDonors" [rowHover]="true" dataKey="id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+        <ng-template #caption>
+            <div class="flex items-center justify-between">
+                <h5 class="m-0">Manage Donors</h5>
+                <p-iconfield>
+                    <p-inputicon styleClass="pi pi-search" />
+                    <input pInputText type="text" [(ngModel)]="searchValue"
+                        (input)="dt.filterGlobal(searchValue, 'contains')" placeholder="Search..." />
+                </p-iconfield>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="width: 3rem">
+                    <p-tableHeaderCheckbox />
+                </th>
+                <th style="min-width: 16rem">Code</th>
+                <th pSortableColumn="name" style="min-width:16rem">
+                    Name
+                    <p-sortIcon field="name" />
+                </th>
+                
+                <th pSortableColumn="phone" style="min-width: 8rem">
+                    Phone
+                    <p-sortIcon field="phone" />
+                </th>
+                <th pSortableColumn="email" style="min-width: 8rem">
+                    Email
+                    <p-sortIcon field="email" />
+                </th>
+                <th style="min-width: 12rem"></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-donor>
+            <tr>
+                <td style="width: 3rem">
+                    <p-tableCheckbox [value]="donor" />
+                </td>
+                <td style="min-width: 12rem">{{ donor.id }}</td>
+                <td style="min-width: 16rem">{{ donor.name }}</td>
+                <td>{{ donor.phone }}</td>
+                <td>{{ donor.email }}</td>
+                <td>
+                    <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true"
+                        (click)="editDonor(donor)" />
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #summary>
+            <div class="flex items-center justify-between">In total there are {{ donors ? donors.length : 0 }}
+                donors.</div>
+        </ng-template>
+    </p-table>
+
+    <p-dialog [(visible)]="donorDialog" [style]="{ width: '450px' }" header="Donor Details" [modal]="true">
+        <ng-template #content>
+            <div class="flex flex-col gap-6">
+                <div> <label for="name" class="block font-bold mb-3">Name</label>
+                    <input type="text" pInputText id="name" name="name" [(ngModel)]="donor.name" required autofocus fluid #name="ngModel" />
+                    <small class="text-red-500" *ngIf="submitted && !donor.name">Name is required.</small>
+                </div>
+
+                <div class="grid grid-cols-12 gap-4">
+                    <div class="col-span-6">
+                        <label for="phone" class="block font-bold mb-3">Phone</label>
+                        <input type="text" pInputText id="phone" [(ngModel)]="donor.phone" fluid  />
+                    </div>
+                    <div class="col-span-6">
+                        <label for="email" class="block font-bold mb-3">Email</label>
+                        <input type="email" pInputText id="email" [(ngModel)]="donor.email"  fluid email required #email="ngModel" />
+                        <small class="text-red-500" *ngIf="submitted && !donor.name">email is required.</small>
+                        <small *ngIf="email.errors?.['email']">Please enter a valid email address.</small>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template #footer>
+            <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
+            <p-button label="Save" icon="pi pi-check"  (click)="saveDonor()" />
+            
+        </ng-template>
+    </p-dialog>
+
+    <p-confirmDialog [style]="{ width: '450px' }" />
+
+</div>
